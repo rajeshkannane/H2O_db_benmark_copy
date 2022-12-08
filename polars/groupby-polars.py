@@ -6,7 +6,6 @@ import os
 import gc
 import timeit
 import polars as pl
-from polars.lazy import col
 
 exec(open("./_helpers/helpers.py").read())
 
@@ -23,7 +22,7 @@ src_grp = os.path.join("data", data_name + ".csv")
 print("loading dataset %s" % data_name, flush=True)
 
 with pl.StringCache():
-    x = pl.read_csv(src_grp, dtype={"id4":pl.Int32, "id5":pl.Int32, "id6":pl.Int32, "v1":pl.Int32, "v2":pl.Int32, "v3":pl.Float64}, low_memory=True)
+    x = pl.read_csv(src_grp, dtypes={"id4":pl.Int32, "id5":pl.Int32, "id6":pl.Int32, "v1":pl.Int32, "v2":pl.Int32, "v3":pl.Float64}, low_memory=True)
     x = x.with_column(pl.col("id1").cast(pl.Categorical))
     x["id1"].shrink_to_fit(in_place=True)
     x = x.with_column(pl.col("id2").cast(pl.Categorical))
